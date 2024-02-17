@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Sticker = ({ data, stickerType }) => {
   // data: results object, containing:
@@ -14,17 +15,12 @@ const Sticker = ({ data, stickerType }) => {
   // description
   // thumbnail: path, extension
   // title
-  // _id
+  // _id));
 
   //   Character sticker
   return stickerType === "character" ? (
     <div>
-      <Link
-        to={`/marvel/comics/${data._id}`}
-        // onClick={() => {
-        //   console.log("character link: click");
-        // }}
-      >
+      <Link to={`/marvel/comics/${data._id}`}>
         <div>
           <img
             src={`${data.thumbnail.path}/portrait_small.${data.thumbnail.extension}`}
@@ -34,13 +30,24 @@ const Sticker = ({ data, stickerType }) => {
           <p>{data.description}</p>
         </div>
       </Link>
-      <Link
+      <p
         onClick={() => {
-          console.log("character favorite link: click");
+          // data id => string
+          const newFavoriteId = JSON.stringify(data._id) + "-character";
+          // change cookie string
+          console.log("sticker, favorites avant: ", Cookies.get("favorites"));
+          const newFavorites =
+            (Cookies.get("favorites") === undefined
+              ? ""
+              : Cookies.get("favorites")) +
+            newFavoriteId +
+            ";";
+          // update cookie
+          Cookies.set("favorites", newFavorites);
         }}
       >
         Add to favorite
-      </Link>
+      </p>
     </div>
   ) : (
     // Comic sticker
@@ -52,13 +59,24 @@ const Sticker = ({ data, stickerType }) => {
         />
         <p>{data.title}</p>
         <p>{data.description}</p>
-        <Link
+        <p
           onClick={() => {
-            console.log("comic favorite link: click");
+            // data id => string
+            const newFavoriteId = JSON.stringify(data._id) + "-comic";
+            // change cookie string
+            const newFavorites =
+              (Cookies.get("favorites") === undefined
+                ? ""
+                : Cookies.get("favorites")) +
+              newFavoriteId +
+              ";";
+            // const newFavorites = Cookies.get("favorites") + newFavoriteId;
+            // update cookie
+            Cookies.set("favorites", newFavorites);
           }}
         >
           Add to favorite
-        </Link>
+        </p>
       </div>
     )
   );

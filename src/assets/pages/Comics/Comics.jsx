@@ -4,7 +4,7 @@ import axios from "axios";
 // Components
 import Sticker from "../../components/Sticker/Sticker";
 
-const Comics = ({ marvelUrl }) => {
+const Comics = ({ marvelUrl, favorites, setFavorites }) => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -24,7 +24,15 @@ const Comics = ({ marvelUrl }) => {
   return !isLoading ? (
     <main>
       {data.results.map((result, index) => {
-        return <Sticker key={index} data={result} stickerType="comic" />;
+        return (
+          <Sticker
+            key={index}
+            data={result}
+            stickerType="comic"
+            favorites={favorites}
+            setFavorites={setFavorites}
+          />
+        );
       })}
     </main>
   ) : (
